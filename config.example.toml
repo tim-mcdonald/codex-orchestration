@@ -1,0 +1,33 @@
+# Minimal orchestration config — merge, don't replace
+
+# Merge the relevant keys into your existing ~/.codex/config.toml. This is not a
+# full config: it only contains what this orchestration approach needs.
+#
+# Requires a Codex build with multi-agent support (codex exec --enable multi_agent
+# or the desktop app's multi-agent feature). Key names follow the multi-agent V2
+# documentation; older builds may use slightly different names.
+
+# Sol Medium: recommended main/orchestrator thread (synthesis, routing, decisions).
+model = "gpt-5.6-sol"
+model_reasoning_effort = "medium"
+
+[agents]
+# Enable subagents; role definitions live in ~/.codex/agents/*.toml.
+enabled = true
+
+# Fallback for subagents without an explicit model: Luna Medium, so an
+# unconfigured spawn never silently inherits the main thread's Sol model.
+default_subagent_model = "gpt-5.6-luna"
+default_subagent_reasoning_effort = "medium"
+
+# Recommended concurrency for parallel subagents.
+max_concurrent_threads_per_session = 4
+
+# Notes:
+#
+# - The author's local config also carries `max_threads` and `max_depth` (app-
+#   specific knobs, not documented public config). They are deliberately not
+#   included here; main-thread-controlled delegation is enforced by `AGENTS.md`
+#   instead (subagents never spawn subagents).
+# - The full local `config.toml` also contains API keys and machine-specific
+#   paths; it is not tracked in this repository.

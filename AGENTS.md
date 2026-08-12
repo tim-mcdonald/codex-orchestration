@@ -17,7 +17,7 @@ Escalate to Sol High only for exceptionally difficult or consequential judgment;
 - Read-heavy codebase exploration, tracing execution paths, mapping files/symbols -> spawn `explorer`.
 - External research, documentation lookup, verifying APIs or framework behavior -> spawn `explorer` (same role; name the external target in the prompt).
 - Code review, correctness / security / test-gap analysis -> spawn `reviewer`.
-- UI/UX implementation and visual polish -> spawn `designer`.
+- Visual design, UI/UX, art direction, game presentation, and implementation requiring visual judgment -> spawn `designer`. The designer may implement visual changes directly when that produces better or faster design iteration. Repetitive or clearly specified visual implementation may be delegated to `worker` after the direction and acceptance criteria are established.
 - Architecture, migrations, system design, ambiguous cross-cutting decisions -> spawn `architect`.
 - Scoped, well-bounded implementation or fixes -> spawn `worker`.
 - If no specialist fits and the task is a bounded change, spawn `worker`; otherwise use the inline exceptions above.
@@ -40,7 +40,7 @@ Examples:
 
 - Ordinary implementation: `explorer` if needed -> `worker` -> `reviewer` when warranted.
 - Architecture-heavy: `explorer(s)` -> `architect` -> `worker(s)` -> `reviewer`.
-- Visual/design: `designer` -> `worker(s)` -> `designer` review -> iterate. The main thread coordinates each step; `designer` never spawns workers itself.
+- Visual/design: `designer` -> direct iteration and/or `worker` delegation -> `designer` review -> iterate. The main thread coordinates each step; `designer` never spawns workers itself.
 
 ## Delegation behavior
 
@@ -68,8 +68,9 @@ Examples:
 
 ## Verification routing
 
-- Route delegated verification to `explorer`, not `worker`, because `worker` is write-capable. Ask `explorer` to run `<command>` and report pass/fail counts and failing test names only; do not analyze, fix, or explore.
-- A single targeted check (e.g. `npm test -- --grep oneCase`) after a tiny, localized edit may be run inline; broader verification should be delegated to `explorer`.
+- Use `explorer` for verification that is genuinely read-only-safe: run `<command>` and report pass/fail counts and failing test names only; do not analyze, fix, or explore.
+- If verification requires workspace writes or build artifacts (caches, generated output, coverage files), use `worker` with explicit instructions: do not modify source code; only run/inspect/report verification results.
+- A single targeted check (e.g. `npm test -- --grep oneCase`) after a tiny, localized edit may be run inline; broader verification should be delegated.
 - Mandatory, not optional, in autonomous worktree delegations ("work in bounded, verified slices").
 
 ## Long sessions & durable artifacts
