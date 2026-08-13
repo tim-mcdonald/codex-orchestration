@@ -15,10 +15,10 @@ model_reasoning_effort = "medium"
 # Enable subagents; role definitions live in ~/.codex/agents/*.toml.
 enabled = true
 
-# Fallback for subagents without an explicit model: Luna Medium, so an
-# unconfigured spawn never silently inherits the main thread's Sol model.
-default_subagent_model = "gpt-5.6-luna"
-default_subagent_reasoning_effort = "medium"
+# `default_subagent_model` / `default_subagent_reasoning_effort` are
+# intentionally omitted: on current builds the default overrides agent-file
+# model pins, and Luna is not in the spawnable set (multi_agent_version v1) -
+# a Luna default makes typed spawns fail with "Unknown model `gpt-5.6-luna`".
 
 # Recommended concurrency for parallel subagents.
 max_concurrent_threads_per_session = 4
