@@ -50,6 +50,11 @@ Examples:
 - Do not spawn children that spawn more children (max_depth is 1).
 - Do not delegate trivial one-step tasks.
 
+## Spawn mechanics
+
+- When spawning a specialized named agent, use `fork_turns="none"` unless inherited conversation history is explicitly needed.
+- Use `agent_type` to select the configured role and do not override its model/reasoning effort unless necessary.
+
 ## Reviewer spawn threshold
 
 - Skip reviewer for trivial/mechanical diffs (naming, formatting, one-line changes). Mandatory for: security, money/data handling, state/race conditions, or any diff the orchestrator isn't fully confident about.
